@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zona Inteligente PRO – Plataforma de Análise Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --azul-escuro: #0b1a33;
+      --dourado: #FFD700;
+      --branco: #f0f4ff;
+      --cinza: #8aa0b5;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--azul-escuro);
+      color: var(--branco);
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #0e2240;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    h1 {
+      font-size: 2.2em;
+      color: var(--dourado);
+      margin-bottom: 12px;
+    }
+    .beneficios {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 12px;
+      margin: 24px 0;
+    }
+    .beneficios li {
+      margin: 12px 0;
+      list-style: none;
+      padding-left: 20px;
+      position: relative;
+    }
+    .beneficios li:before {
+      content: "✅";
+      position: absolute;
+      left: 0;
+      color: var(--dourado);
+    }
+    .pix-section {
+      background: #0a172a;
+      border: 2px dashed var(--dourado);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      margin: 24px 0;
+    }
+    .valor {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: var(--dourado);
+      margin: 12px 0;
+    }
+    .btn-pix {
+      display: inline-block;
+      background: var(--dourado);
+      color: var(--azul-escuro);
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 16px;
+      transition: all 0.3s;
+    }
+    .btn-pix:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255,215,0,0.5);
+    }
+    .form-contato {
+      margin-top: 32px;
+    }
+    .form-contato input, .form-contato textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      background: #0a172a;
+      border: 1px solid #2a3f5f;
+      border-radius: 8px;
+      color: var(--branco);
+    }
+    .form-contato button {
+      background: var(--dourado);
+      color: var(--azul-escuro);
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 32px;
+      color: var(--cinza);
+      font-size: 0.9em;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 20px; }
+      h1 { font-size: 1.8em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🧠 Zona Inteligente PRO</h1>
+      <p>Plataforma de Análise Premium – Acesso Exclusivo</p>
+    </header>
+
+    <div class="beneficios">
+      <h3>💡 O que você recebe:</h3>
+      <ul>
+        <li>Acesso às minhas zonas de alta probabilidade com imagem real do gráfico</li>
+        <li>Par de moeda, broker (PocketOption, QxBroker, XP, Binance) e lógica completa</li>
+        <li>Replicação 1:1 no seu gráfico – sem sinais vagos</li>
+        <li>Atualizações diárias com setups validados</li>
+        <li>Design profissional, mobile-friendly e fácil de usar</li>
+      </ul>
+    </div>
+
+    <div class="pix-section">
+      <h3>💰 Assinatura Mensal</h3>
+      <div class="valor">R$ 147,00</div>
+      <p>Pagamento seguro via PIX</p>
+      <a href="https://qrnet.com.br/PIX/11998545662" class="btn-pix" target="_blank">Pagar com PIX</a>
+      <p style="margin-top:12px; font-size:0.9em; color:#aaa;">
+        Após o pagamento, envie comprovante pelo WhatsApp para liberação.
+      </p>
+    </div>
+
+    <div class="form-contato">
+      <h3>📲 Para liberação do acesso, preencha:</h3>
+      <input type="text" id="nome" placeholder="Seu nome completo" required />
+      <input type="email" id="email" placeholder="Seu e-mail" />
+      <input type="tel" id="whatsapp" placeholder="Seu WhatsApp (com DDD)" required />
+      <button onclick="enviarDados()">Enviar para Liberação</button>
+    </div>
+
+    <footer>
+      © 2025 Zona Inteligente PRO – Todos os direitos reservados.
+    </footer>
+  </div>
+
+  <script>
+    function enviarDados() {
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const whatsapp = document.getElementById('whatsapp').value;
+      
+      if (!nome || !whatsapp) {
+        alert('Preencha nome e WhatsApp.');
+        return;
+      }
+      
+      // Simples: abre WhatsApp com mensagem pré-preenchida
+      const msg = `Olá! Quero assinar o Zona Inteligente PRO.%0A%0ANome: ${nome}%0AWhatsApp: ${whatsapp}%0AEmail: ${email}%0A%0AJá realizei o pagamento via PIX.`;
+      window.open(`https://wa.me/5511998545662?text=${msg}`, '_blank');
+    }
+  </script>
+</body>
+</html>
