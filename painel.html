@@ -169,6 +169,23 @@
       max-width: 600px;
       line-height: 1.7;
       color: var(--texto-suave);
+      margin-bottom: 24px;
+    }
+    .btn-assinar {
+      display: inline-block;
+      background: var(--dourado);
+      color: var(--azul-escuro);
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 10px;
+      transition: all 0.3s;
+      font-size: 1.1em;
+    }
+    .btn-assinar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255,215,0,0.5);
     }
     @media (max-width: 768px) {
       .sidebar { width: 70px; padding: 24px 8px; }
@@ -182,7 +199,10 @@
 
 <div id="tela-bloqueio" class="tela-bloqueio">
   <h2>🔒 Acesso Restrito</h2>
-  <p>Este conteúdo é exclusivo para assinantes da <strong>Zona Inteligente PRO</strong>.<br>Entre em contato com o analista para obter seu link de acesso.</p>
+  <p>Este conteúdo é exclusivo para assinantes da <strong>Zona Inteligente PRO</strong>.</p>
+  <p>Quer acessar as zonas de alta probabilidade com imagem + par + broker + lógica completa?</p>
+  <a href="https://franciscoanalista09.github.io/francisco.github.io/venda.html" class="btn-assinar">👉 Assinar Agora – R$ 147/mês</a>
+  <p style="font-size:0.9em; color:var(--texto-suave); margin-top:20px;">Após o pagamento, você receberá seu link de acesso por WhatsApp.</p>
 </div>
 
 <div id="dashboard" style="display:none;">
@@ -228,8 +248,11 @@
 </div>
 
 <script>
+  // Lista de acessos: [token, data_expiracao (YYYY-MM-DD)]
   const acessos = [
-    ["analista_pro", "2099-12-31"]
+    ["analista_pro", "2099-12-31"] // seu acesso vitalício
+    // Adicione novos tokens aqui após pagamento
+    // ["cliente123", "2025-05-15"],
   ];
 
   function verificarAcesso() {
@@ -251,7 +274,13 @@
     const hoje = new Date();
     
     if (hoje > dataExpiracao) {
-      document.getElementById('tela-bloqueio').innerHTML = `<h2>⏳ Plano Expirado</h2><p>Seu acesso à <strong>Zona Inteligente PRO</strong> expirou.<br>Renove seu plano para continuar recebendo as zonas de alta probabilidade.</p>`;
+      document.getElementById('tela-bloqueio').innerHTML = `
+        <h2>⏳ Plano Expirado</h2>
+        <p>Seu acesso à <strong>Zona Inteligente PRO</strong> expirou.</p>
+        <p>Renove seu plano para continuar recebendo as zonas de alta probabilidade.</p>
+        <a href="https://franciscoanalista09.github.io/francisco.github.io/venda.html" class="btn-assinar">🔄 Renovar Acesso – R$ 147/mês</a>
+        <p style="font-size:0.9em; color:var(--texto-suave); margin-top:20px;">Após o pagamento, você receberá um novo link de acesso.</p>
+      `;
       document.getElementById('tela-bloqueio').style.display = 'flex';
       return false;
     }
