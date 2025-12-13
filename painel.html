@@ -1,180 +1,405 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Zona Inteligente PRO – Plataforma de Análise Premium</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zona Inteligente PRO – Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --azul-escuro: #0b1a33;
       --dourado: #FFD700;
-      --branco: #f0f4ff;
-      --cinza: #8aa0b5;
+      --cartao: #0e2240;
+      --texto: #f0f4ff;
+      --texto-suave: #8aa0b5;
+      --sombra: 0 4px 20px rgba(0,0,0,0.4);
+      --perigo: #ff6b6b;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
       background: var(--azul-escuro);
-      color: var(--branco);
-      line-height: 1.6;
+      color: var(--texto);
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 240px;
+      background: var(--cartao);
+      border-right: 1px solid #1a3355;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .sidebar-title {
+      font-size: 1.4em;
+      color: var(--dourado);
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .btn-filtro {
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: transparent;
+      border: 2px solid #2a4466;
+      color: var(--texto-suave);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95em;
+    }
+    .btn-filtro:hover,
+    .btn-filtro.ativo {
+      background: rgba(255, 215, 0, 0.15);
+      color: var(--dourado);
+      border-color: var(--dourado);
+    }
+    .main-content {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+    .header-banner {
+      background: linear-gradient(90deg, #0b1a33, #122a4a);
+      color: var(--dourado);
+      padding: 16px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+      box-shadow: var(--sombra);
+      font-size: 1.7em;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .card-zona {
+      background: var(--cartao);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: var(--sombra);
+      margin-bottom: 24px;
+      transition: transform 0.3s;
+    }
+    .card-zona:hover {
+      transform: translateY(-5px);
+      border: 1px solid var(--dourado);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #1a3355;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .card-title {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: var(--dourado);
+    }
+    .card-broker {
+      font-size: 0.95em;
+      background: rgba(255,215,0,0.1);
+      padding: 5px 12px;
+      border-radius: 20px;
+      color: var(--dourado);
+      font-weight: 600;
+    }
+    .btn-excluir {
+      background: none;
+      border: none;
+      color: var(--perigo);
+      font-size: 1.3em;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .btn-excluir:hover {
+      background: rgba(255,107,107,0.2);
+    }
+    .zona-imagem {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin: 16px 0;
+      border: 2px solid #1a3355;
+    }
+    .btn-detalhes {
+      margin-top: 16px;
+      padding: 10px 20px;
+      background: rgba(255,215,0,0.15);
+      color: var(--dourado);
+      border: 1px solid var(--dourado);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-detalhes:hover {
+      background: var(--dourado);
+      color: var(--azul-escuro);
+    }
+    .tela-bloqueio {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: var(--azul-escuro);
+      text-align: center;
       padding: 20px;
     }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #0e2240;
-      border-radius: 16px;
-      padding: 32px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    header {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-    h1 {
+    .tela-bloqueio h2 {
       font-size: 2.2em;
       color: var(--dourado);
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
-    .beneficios {
-      background: rgba(255,255,255,0.05);
-      padding: 20px;
-      border-radius: 12px;
-      margin: 24px 0;
+    .tela-bloqueio p {
+      font-size: 1.2em;
+      max-width: 600px;
+      line-height: 1.7;
+      color: var(--texto-suave);
     }
-    .beneficios li {
-      margin: 12px 0;
-      list-style: none;
-      padding-left: 20px;
-      position: relative;
-    }
-    .beneficios li:before {
-      content: "✅";
-      position: absolute;
-      left: 0;
-      color: var(--dourado);
-    }
-    .pix-section {
-      background: #0a172a;
-      border: 2px dashed var(--dourado);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      margin: 24px 0;
-    }
-    .valor {
-      font-size: 1.8em;
-      font-weight: bold;
-      color: var(--dourado);
-      margin: 12px 0;
-    }
-    .btn-pix {
-      display: inline-block;
-      background: var(--dourado);
-      color: var(--azul-escuro);
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-weight: bold;
-      text-decoration: none;
-      margin-top: 16px;
-      transition: all 0.3s;
-    }
-    .btn-pix:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(255,215,0,0.5);
-    }
-    .form-contato {
-      margin-top: 32px;
-    }
-    .form-contato input, .form-contato textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      background: #0a172a;
-      border: 1px solid #2a3f5f;
-      border-radius: 8px;
-      color: var(--branco);
-    }
-    .form-contato button {
-      background: var(--dourado);
-      color: var(--azul-escuro);
-      border: none;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 12px;
-    }
-    footer {
-      text-align: center;
-      margin-top: 32px;
-      color: var(--cinza);
-      font-size: 0.9em;
-    }
-    @media (max-width: 600px) {
-      .container { padding: 20px; }
-      h1 { font-size: 1.8em; }
+    @media (max-width: 768px) {
+      .sidebar { width: 70px; padding: 24px 8px; }
+      .sidebar-title { font-size: 1.1em; }
+      .btn-filtro span { display: none; }
+      .btn-filtro { justify-content: center; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🧠 Zona Inteligente PRO</h1>
-      <p>Plataforma de Análise Premium – Acesso Exclusivo</p>
-    </header>
 
-    <div class="beneficios">
-      <h3>💡 O que você recebe:</h3>
-      <ul>
-        <li>Acesso às minhas zonas de alta probabilidade com imagem real do gráfico</li>
-        <li>Par de moeda, broker (PocketOption, QxBroker, XP, Binance) e lógica completa</li>
-        <li>Replicação 1:1 no seu gráfico – sem sinais vagos</li>
-        <li>Atualizações diárias com setups validados</li>
-        <li>Design profissional, mobile-friendly e fácil de usar</li>
-      </ul>
-    </div>
+<div id="tela-bloqueio" class="tela-bloqueio">
+  <h2>🔒 Acesso Restrito</h2>
+  <p>Este conteúdo é exclusivo para assinantes da <strong>Zona Inteligente PRO</strong>.<br>Entre em contato com o analista para obter seu link de acesso.</p>
+</div>
 
-    <div class="pix-section">
-      <h3>💰 Assinatura Mensal</h3>
-      <div class="valor">R$ 147,00</div>
-      <p>Pagamento seguro via PIX</p>
-      <a href="https://qrnet.com.br/PIX/11998545662" class="btn-pix" target="_blank">Pagar com PIX</a>
-      <p style="margin-top:12px; font-size:0.9em; color:#aaa;">
-        Após o pagamento, envie comprovante pelo WhatsApp para liberação.
-      </p>
-    </div>
-
-    <div class="form-contato">
-      <h3>📲 Para liberação do acesso, preencha:</h3>
-      <input type="text" id="nome" placeholder="Seu nome completo" required />
-      <input type="email" id="email" placeholder="Seu e-mail" />
-      <input type="tel" id="whatsapp" placeholder="Seu WhatsApp (com DDD)" required />
-      <button onclick="enviarDados()">Enviar para Liberação</button>
-    </div>
-
-    <footer>
-      © 2025 Zona Inteligente PRO – Todos os direitos reservados.
-    </footer>
+<div id="dashboard" style="display:none;">
+  <div class="sidebar">
+    <div class="sidebar-title">🧠 Zona Inteligente PRO</div>
+    <button class="btn-filtro" data-filtro="todos">🌐 Todos</button>
+    <button class="btn-filtro" data-filtro="pocketoption">🟢 pocketoption.com</button>
+    <button class="btn-filtro" data-filtro="qxbroker">🔵 qxbroker.com</button>
+    <button class="btn-filtro" data-filtro="xp">💰 XP Investimentos</button>
+    <button class="btn-filtro" data-filtro="binance">₿ Binance</button>
   </div>
 
-  <script>
-    function enviarDados() {
-      const nome = document.getElementById('nome').value;
-      const email = document.getElementById('email').value;
-      const whatsapp = document.getElementById('whatsapp').value;
-      
-      if (!nome || !whatsapp) {
-        alert('Preencha nome e WhatsApp.');
+  <div class="main-content">
+    <div class="header-banner">🧠 Zona Inteligente PRO</div>
+    <div id="zonas-container"></div>
+  </div>
+</div>
+
+<div id="modal-detalhes" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center; padding:20px;">
+  <div style="background:#0e2240; padding:24px; border-radius:14px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 4px 20px rgba(0,0,0,0.4);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid #1a3355;">
+      <h3 style="color:#FFD700; font-size:1.4em;">🔍 Detalhes da Zona</h3>
+      <span id="close-detalhes" style="font-size:1.5em; color:#8aa0b5; cursor:pointer;">&times;</span>
+    </div>
+    <div id="logica-texto" style="line-height:1.7; white-space:pre-line;"></div>
+  </div>
+</div>
+
+<div id="modal-form" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center; padding:20px;">
+  <div style="background:#0e2240; padding:24px; border-radius:14px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 4px 20px rgba(0,0,0,0.4);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid #1a3355;">
+      <h3 style="color:#FFD700; font-size:1.4em;">➕ Adicionar Nova Zona</h3>
+      <span id="close-form" style="font-size:1.5em; color:#8aa0b5; cursor:pointer;">&times;</span>
+    </div>
+    <form id="form-add-zona">
+      <div style="margin-bottom:16px;"><label style="display:block; margin-bottom:8px; color:#8aa0b5;">Par de Moeda</label><input type="text" id="par" placeholder="Ex: wdof26, EUR/JPY" style="width:100%; padding:10px; background:#0a172a; border:1px solid #2a4466; border-radius:8px; color:#f0f4ff;" required></div>
+      <div style="margin-bottom:16px;"><label style="display:block; margin-bottom:8px; color:#8aa0b5;">Broker/Plataforma</label><select id="broker" style="width:100%; padding:10px; background:#0a172a; border:1px solid #2a4466; border-radius:8px; color:#f0f4ff;" required><option value="">Selecione...</option><option value="pocketoption">pocketoption.com</option><option value="qxbroker">qxbroker.com</option><option value="xp">XP Investimentos</option><option value="binance">Binance</option></select></div>
+      <div style="margin-bottom:16px;"><label style="display:block; margin-bottom:8px; color:#8aa0b5;">Imagem da Captura de Tela</label><input type="file" id="imagem" accept="image/*" style="width:100%; padding:8px; background:#0a172a; border:1px solid #2a4466; border-radius:8px; color:#f0f4ff;" required></div>
+      <div style="margin-bottom:16px;"><label style="display:block; margin-bottom:8px; color:#8aa0b5;">Análise (Opcional)</label><textarea id="logica" placeholder="Sua lógica aqui..." style="width:100%; padding:10px; background:#0a172a; border:1px solid #2a4466; border-radius:8px; color:#f0f4ff; height:100px;"></textarea></div>
+      <button type="submit" style="width:100%; padding:12px; background:#FFD700; color:#0b1a33; border:none; border-radius:8px; font-weight:bold;">Salvar Zona</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const acessos = [
+    ["analista_pro", "2099-12-31"]
+  ];
+
+  function verificarAcesso() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('access');
+    
+    if (!token) {
+      document.getElementById('tela-bloqueio').style.display = 'flex';
+      return false;
+    }
+    
+    const acessoValido = acessos.find(a => a[0] === token);
+    if (!acessoValido) {
+      document.getElementById('tela-bloqueio').style.display = 'flex';
+      return false;
+    }
+    
+    const dataExpiracao = new Date(acessoValido[1]);
+    const hoje = new Date();
+    
+    if (hoje > dataExpiracao) {
+      document.getElementById('tela-bloqueio').innerHTML = `<h2>⏳ Plano Expirado</h2><p>Seu acesso à <strong>Zona Inteligente PRO</strong> expirou.<br>Renove seu plano para continuar recebendo as zonas de alta probabilidade.</p>`;
+      document.getElementById('tela-bloqueio').style.display = 'flex';
+      return false;
+    }
+    
+    document.getElementById('tela-bloqueio').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'flex';
+    return true;
+  }
+
+  if (verificarAcesso()) {
+    function carregarZonas() {
+      return JSON.parse(localStorage.getItem('zonas-francisco') || '[]');
+    }
+
+    function salvarZonas(zonas) {
+      localStorage.setItem('zonas-francisco', JSON.stringify(zonas));
+    }
+
+    let brokerAtual = "todos";
+
+    function filtrarZonas(filtro) {
+      brokerAtual = filtro;
+      const container = document.getElementById("zonas-container");
+      container.innerHTML = "";
+
+      let zonas = carregarZonas();
+
+      if (filtro !== "todos") {
+        zonas = zonas.filter(z => z.broker === filtro);
+      }
+
+      if (zonas.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color:#8aa0b5;">Nenhuma zona encontrada.</p>`;
+      } else {
+        zonas.forEach(zona => {
+          const card = document.createElement("div");
+          card.className = "card-zona";
+          card.dataset.id = zona.id;
+
+          let brokerNome = "";
+          if (zona.broker === "pocketoption") brokerNome = "pocketoption.com";
+          else if (zona.broker === "qxbroker") brokerNome = "qxbroker.com";
+          else if (zona.broker === "xp") brokerNome = "XP Investimentos";
+          else if (zona.broker === "binance") brokerNome = "Binance";
+
+          card.innerHTML = `
+            <div class="card-header">
+              <div>
+                <div class="card-title">${zona.par}</div>
+                <div class="card-broker">${brokerNome}</div>
+              </div>
+              <button class="btn-excluir" data-id="${zona.id}">🗑️</button>
+            </div>
+            <img src="${zona.imagem}" class="zona-imagem" alt="Captura de tela da zona" />
+            ${zona.logica ? `<button class="btn-detalhes" data-id="${zona.id}">🔍 Ver Análise</button>` : ''}
+          `;
+
+          container.appendChild(card);
+        });
+
+        document.querySelectorAll(".btn-detalhes").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            const zona = zonas.find(z => z.id === id);
+            document.getElementById("logica-texto").textContent = zona.logica || "Nenhuma análise fornecida.";
+            document.getElementById("modal-detalhes").style.display = "flex";
+          });
+        });
+
+        document.querySelectorAll(".btn-excluir").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-id");
+            if (confirm("Excluir esta zona?")) {
+              const zonas = carregarZonas();
+              const novasZonas = zonas.filter(z => z.id !== id);
+              salvarZonas(novasZonas);
+              filtrarZonas(brokerAtual);
+            }
+          });
+        });
+      }
+
+      if (!document.getElementById("btn-add-bottom")) {
+        const addBtn = document.createElement("button");
+        addBtn.id = "btn-add-bottom";
+        addBtn.textContent = "➕ Adicionar Nova Zona";
+        addBtn.className = "btn-detalhes";
+        addBtn.style.marginTop = "24px";
+        addBtn.addEventListener("click", () => {
+          const brokerSelect = document.getElementById("broker");
+          if (brokerAtual !== "todos") brokerSelect.value = brokerAtual;
+          document.getElementById("modal-form").style.display = "flex";
+        });
+        container.appendChild(addBtn);
+      }
+    }
+
+    document.getElementById("close-detalhes").onclick = () => {
+      document.getElementById("modal-detalhes").style.display = "none";
+    };
+    document.getElementById("close-form").onclick = () => {
+      document.getElementById("modal-form").style.display = "none";
+    };
+
+    document.querySelectorAll(".btn-filtro").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".btn-filtro").forEach(b => b.classList.remove("ativo"));
+        btn.classList.add("ativo");
+        filtrarZonas(btn.getAttribute("data-filtro"));
+      });
+    });
+
+    document.getElementById("form-add-zona").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const par = document.getElementById("par").value.trim();
+      const broker = document.getElementById("broker").value;
+      const logica = document.getElementById("logica").value.trim();
+      const file = document.getElementById("imagem").files[0];
+
+      if (!par || !broker || !file) {
+        alert("Preencha todos os campos obrigatórios.");
         return;
       }
-      
-      // Simples: abre WhatsApp com mensagem pré-preenchida
-      const msg = `Olá! Quero assinar o Zona Inteligente PRO.%0A%0ANome: ${nome}%0AWhatsApp: ${whatsapp}%0AEmail: ${email}%0A%0AJá realizei o pagamento via PIX.`;
-      window.open(`https://wa.me/5511998545662?text=${msg}`, '_blank');
-    }
-  </script>
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const novaZona = {
+          id: Date.now().toString(),
+          par: par,
+          broker: broker,
+          logica: logica,
+          imagem: reader.result
+        };
+
+        const zonas = carregarZonas();
+        zonas.push(novaZona);
+        salvarZonas(zonas);
+
+        document.getElementById("modal-form").style.display = "none";
+        document.getElementById("form-add-zona").reset();
+        filtrarZonas(brokerAtual);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    filtrarZonas("todos");
+  }
+</script>
+
 </body>
 </html>
