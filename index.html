@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>W&D PÃES - Faça seu Pedido</title>
 <meta name="theme-color" content="#1a1a1a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="W&D PÃES">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
@@ -41,16 +38,26 @@
   }
   .header p { font-size: 14px; opacity: 0.9; margin-top: 5px; }
   .content { padding: 25px; }
-  .customer-name {
+  .input-field {
     width: 100%;
     padding: 12px 15px;
     border: 2px solid #D4AF37;
     border-radius: 10px;
     font-size: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     outline: none;
   }
-  .customer-name:focus { border-color: #1a1a1a; }
+  .input-field:focus { border-color: #1a1a1a; }
+  .optional-tag {
+    display: inline-block;
+    background: #fff8e1;
+    color: #8B4513;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 6px;
+  }
   .item {
     display: flex;
     align-items: center;
@@ -133,7 +140,6 @@
     display: flex; align-items: center; justify-content: center; gap: 10px;
     transition: all 0.2s;
     box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-    margin-bottom: 12px;
   }
   .btn-whatsapp:hover { background: #128C7E; transform: translateY(-2px); }
   .btn-whatsapp:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
@@ -174,12 +180,14 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>🥖 W&D PÃES</h1>
+      <h1> W&D PÃES</h1>
       <p>Faça seu pedido e envie pelo WhatsApp</p>
     </div>
     
     <div class="content">
-      <input type="text" class="customer-name" id="customerName" placeholder="👤 Seu nome (opcional)">
+      <input type="text" class="input-field" id="customerName" placeholder="👤 Seu nome">
+      
+      <input type="text" class="input-field" id="customerAddress" placeholder="🏠 Rua e número (opcional)">
       
       <div id="itemsList"></div>
       
@@ -211,7 +219,7 @@
       </div>
       
       <button class="btn-whatsapp" id="btnWhats" onclick="enviarWhatsApp()" disabled>
-        <span></span> Enviar Pedido no WhatsApp
+        <span>📱</span> Enviar Pedido no WhatsApp
       </button>
       
       <button class="btn-install hidden" id="btnInstall" onclick="instalarApp()">
@@ -235,7 +243,7 @@
     { id: 'carteira', nome: 'Pão Carteira',      emoji: '👛', preco: 0.80 },
     { id: 'milho',    nome: 'Pão de Milho',      emoji: '🌽', preco: 0.80 },
     { id: 'coco',     nome: 'Pão de Coco Bola',  emoji: '🥥', preco: 0.80 },
-    { id: 'creme',    nome: 'Pão de Creme',      emoji: '🍮', preco: 0.80 },
+    { id: 'creme',    nome: 'Pão de Creme',      emoji: '', preco: 0.80 },
     { id: 'frios',    nome: 'Pão de Frios',      emoji: '🥪', preco: 0.80 },
     { id: 'queijo',   nome: 'Pão de Queijo',     emoji: '🧀', preco: 3.00 },
   ];
@@ -246,7 +254,6 @@
   const PIX_KEY = '(11) 93010-4748';
   const PIX_KEY_RAW = '11930104748';
   
-  // Mostrar/esconder Pix
   document.querySelectorAll('input[name="payment"]').forEach(radio => {
     radio.addEventListener('change', function() {
       document.getElementById('pixInfo').classList.toggle('show', this.value === 'PIX');
@@ -313,14 +320,18 @@
   
   function enviarWhatsApp() {
     const nome = document.getElementById('customerName').value.trim();
+    const endereco = document.getElementById('customerAddress').value.trim();
     const itens = produtos.filter(p => pedidos[p.id] > 0);
     const pagamento = document.querySelector('input[name="payment"]:checked');
     
     if (itens.length === 0) { alert('Selecione pelo menos um item!'); return; }
     if (!pagamento) { alert('Selecione um método de pagamento!'); return; }
     
-    let msg = ` *PEDIDO - W&D PÃES*\n\n`;
-    if (nome) msg += ` *Cliente:* ${nome}\n\n`;
+    let msg = `🥖 *PEDIDO - W&D PÃES*\n\n`;
+    if (nome) msg += `👤 *Cliente:* ${nome}\n`;
+    if (endereco) msg += ` *Endereço:* ${endereco}\n`;
+    if (nome || endereco) msg += `\n`;
+    
     msg += `📋 *Itens do Pedido:*\n`;
     
     let total = 0;
@@ -339,7 +350,7 @@
     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
   }
   
-  // === PWA: Instalação ===
+  // PWA: Instalação
   let deferredPrompt;
   const btnInstall = document.getElementById('btnInstall');
   const installHint = document.getElementById('installHint');
@@ -364,7 +375,6 @@
     btnInstall.classList.add('hidden');
   }
   
-  // Registrar Service Worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js').catch(() => {});
   }
